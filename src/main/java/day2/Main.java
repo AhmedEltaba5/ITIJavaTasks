@@ -6,10 +6,16 @@
 package day2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -47,6 +53,7 @@ public class Main {
         countryCities.forEach((i, c) -> {
             System.out.println("key = " + i + " cities= " + c);
         });
+      
         
         //sort cities in each country according to population
         Iterator<Integer> it = countryCities.keySet().iterator();
@@ -63,6 +70,98 @@ public class Main {
         countryCities.forEach((i, c) -> {
             System.out.println("key = " + i + " cities= " + c);
         });
+        
+        //Better String
+        String checkBetter = Main.betterString("longer String", "short Str", (str1,str2)->str1.length()>str2.length());
+        System.out.println(checkBetter);
+        
+        //checkString if conatains only alphapet
+        System.out.println(Main.checkAlphapet("A1hmed123"));
+        
+        //highest population city
+        List<Optional<Double>> highestPopulationCity =cities.stream()
+                .collect(Collectors.groupingBy(City::getCode))
+                .values()
+                .stream()
+                .map(cityList1 -> cityList1.stream()//city
+                        .map(City::getPopulation)
+                        .max(Double::compare)
+                ).collect(Collectors.toList());
+        System.out.println(highestPopulationCity);
+        
+        //highest population city
+        List<Optional<Double>> highestPopulationCityContinent =cities.stream()
+                .collect(Collectors.groupingBy(City::getContinent))
+                .values()
+                .stream()
+                .map(cityList1 -> cityList1.stream()//city
+                        .map(City::getPopulation)
+                        .max(Double::compare)
+                ).collect(Collectors.toList());
+        System.out.println(highestPopulationCityContinent);
+        
+        //get Median & Lower quartile & upper quartile
+        //get sorted array of population
+        double[] sortedPopulationArray = cities.stream()
+                .mapToDouble(City::getPopulation)
+                .sorted()
+                .toArray();
+       
+        System.out.println(sortedPopulationArray.length);
+        System.out.println(Arrays.toString(sortedPopulationArray));
+        
+        //get median
+        System.out.println("Median is: " + getMedian(sortedPopulationArray));
+        
+        //get lower quartile
+        System.out.println("Lower Quartile is: " + getLowerquartile(sortedPopulationArray));
+        
+        //get upper quartile
+        System.out.println("Upper Quartile is: " + getUpperquartile(sortedPopulationArray));
+        
+        //get Average of population values
+        System.out.println("Average is: " + DoubleStream.of(sortedPopulationArray)
+                .reduce(0,(x,y)->x+y) / sortedPopulationArray.length);
+         
+    }
+    
+    static String betterString(String str1, String str2, BiPredicate<String, String> biPredicate) {
+        if (biPredicate.test(str1, str2))
+            return str1;
+        return str2;
+    }
+    
+    static boolean checkAlphapet(String str){
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isLetter(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    static double getMedian(double[] sortedArray) {
+        int middleIndx = sortedArray.length / 2;
+        if (sortedArray.length % 2 == 0) {
+            return (sortedArray[middleIndx] + sortedArray[middleIndx - 1]) / 2;
+        } else
+            return sortedArray[sortedArray.length / 2];
+    }
+    
+    static double getLowerquartile(double[] sortedArray){
+        int middleIndx = (int) Math.ceil(sortedArray.length / 2);
+        double[] LowerArray = Arrays.copyOfRange(sortedArray, 0, middleIndx);
+        System.out.println(Arrays.toString(LowerArray));
+        return Main.getMedian(LowerArray);
+    }
+    
+    static double getUpperquartile(double[] sortedArray){
+        int middleIndx = (int) Math.ceil((double) sortedArray.length / 2);
+        System.out.println(middleIndx);
+        int arrayLength = sortedArray.length;
+        double[] upperArray = Arrays.copyOfRange(sortedArray, middleIndx , arrayLength);
+        System.out.println(Arrays.toString(upperArray));
+        return Main.getMedian(upperArray);
     }
     
 }
