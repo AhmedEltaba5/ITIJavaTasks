@@ -131,7 +131,7 @@ public class Main {
         return str2;
     }
     
-    static boolean checkAlphapet(String str){
+    public static boolean checkAlphapet(String str){
         for (int i = 0; i < str.length(); i++) {
             if (!Character.isLetter(str.charAt(i))) {
                 return false;
@@ -140,7 +140,7 @@ public class Main {
         return true;
     }
     
-    static double getMedian(double[] sortedArray) {
+    public static double getMedian(double[] sortedArray) {
         int middleIndx = sortedArray.length / 2;
         if (sortedArray.length % 2 == 0) {
             return (sortedArray[middleIndx] + sortedArray[middleIndx - 1]) / 2;
@@ -148,20 +148,20 @@ public class Main {
             return sortedArray[sortedArray.length / 2];
     }
     
-    static double getLowerquartile(double[] sortedArray){
+    public static double getLowerquartile(double[] sortedArray){
         int middleIndx = (int) Math.ceil(sortedArray.length / 2);
         double[] LowerArray = Arrays.copyOfRange(sortedArray, 0, middleIndx);
         System.out.println(Arrays.toString(LowerArray));
-        return Main.getMedian(LowerArray);
+        return getMedian(LowerArray);
     }
     
-    static double getUpperquartile(double[] sortedArray){
+    public static double getUpperquartile(double[] sortedArray){
         int middleIndx = (int) Math.ceil((double) sortedArray.length / 2);
         System.out.println(middleIndx);
         int arrayLength = sortedArray.length;
         double[] upperArray = Arrays.copyOfRange(sortedArray, middleIndx , arrayLength);
         System.out.println(Arrays.toString(upperArray));
-        return Main.getMedian(upperArray);
+        return getMedian(upperArray);
     }
     
 }
